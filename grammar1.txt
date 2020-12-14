@@ -1,0 +1,60 @@
+program -> libraries functions MYEOF
+program -> functions MYEOF
+
+libraries -> LIBRARY libraries
+libraries -> LIBRARY
+
+functions -> function functions
+functions -> function
+
+function -> declaration OPENROUND CLOSEROUND OPENCURLY function_body CLOSECURLY
+function -> declaration OPENROUND parameters CLOSEROUND OPENCURLY function_body CLOSECURLY
+
+declaration -> TYPE ID
+
+parameters -> declaration COLON parameters
+parameters -> declaration
+
+function_body -> instructions RETURN operator SEMICOLON
+function_body -> RETURN operator SEMICOLON
+
+instructions -> instruction instructions
+instructions -> instruction
+
+instruction -> initialization SEMICOLON
+instruction -> assignation SEMICOLON
+instruction -> if_instruction
+instruction -> for_instruction
+instruction -> CIN ID SEMICOLON
+instruction -> COUT operator SEMICOLON
+
+initialization -> declaration EQUAL expression init_list
+initialization -> declaration EQUAL expression
+initialization -> declaration init_list
+initialization -> declaration
+
+init_list -> COLON ID EQUAL expression init_list
+init_list -> COLON ID EQUAL expression
+init_list -> COLON ID init_list
+init_list -> COLON ID
+
+assignation -> ID EQUAL expression
+
+expression -> expression OPERATORS expression
+expression -> OPENROUND expression CLOSEROUND
+expression -> operator
+
+operator -> CONST
+operator -> ID
+
+if_instruction -> if_start OPENCURLY instructions CLOSECURLY ELSE OPENCURLY instructions CLOSECURLY
+if_instruction -> if_start OPENCURLY instructions CLOSECURLY
+if_instruction -> if_start OPENCURLY instructions CLOSECURLY ELSE instruction
+if_instruction -> if_start instruction ELSE OPENCURLY instructions CLOSECURLY
+if_instruction -> if_start instruction ELSE instruction
+if_instruction -> if_start instruction
+
+if_start -> IF OPENROUND expression CLOSEROUND
+
+for_instruction -> FOR OPENROUND initialization SEMICOLON expression SEMICOLON assignation CLOSEROUND OPENCURLY instructions CLOSECURLY
+for_instruction -> FOR OPENROUND SEMICOLON expression SEMICOLON CLOSEROUND OPENCURLY instructions CLOSECURLY
