@@ -1,8 +1,9 @@
 class Grammar:
 
     def __init__(self):
-        self.filename = 'grammar2.txt'
+        self.filename = 'grammar1.txt'
         self.grammar = {}
+        self.stringGrammar = []
         self.read_grammar()
 
     def read_grammar(self):
@@ -10,6 +11,7 @@ class Grammar:
             lines = f.readlines()
         for line in lines:
             if line != '\n':
+                self.stringGrammar.append(line)
                 striped_line = line.split('->')
                 neterminal = striped_line[0].replace(' ', '')
                 terminals = []
@@ -32,6 +34,9 @@ class Grammar:
                     if value not in self.grammar.keys():
                         neterminals.add(value)
         return neterminals
+
+    def is_terminal(self, terminal):
+        return terminal in self.get_terminals()
     
     def get_productions(self):
         return self.grammar
@@ -41,7 +46,71 @@ class Grammar:
         for key in self.grammar.keys():
             for alist in self.grammar[key]:
                 if terminal in alist and alist[0] == terminal:
-                    prods.append(key + " -> " + str(alist))
+                    prods.append((key,alist))
         return prods
 
-Grammar()
+    def get_productions_for_terminal(self, neterminal, terminal):
+        prods = self.grammar()
+        return prods
+
+    def find_production_number(self, neterminal, terminal):
+        string = neterminal + ' ->'
+        for term in terminal:
+            string += ' ' + term
+        string += '\n'
+        contor = 0
+        for prod in self.stringGrammar:
+            contor += 1
+            if string == prod:
+                return contor
+        return -1
+    
+    def get_first_production(self):
+        return self.stringGrammar[0].split(' ->')[0]
+
+    def accepts(self, sequence):
+        sequence = sequence.replace('\n',' ').split(' ')
+        firstProduction = self.get_first_production()
+        stack = [firstProduction, '$']
+        quitBand = []
+        sequence.append('$')
+        char = sequence[0]
+        accepted = False
+        while True:
+            print(sequence, stack, quitBand)
+            isTerminal = self.is_terminal(stack[0])
+            if stack[0] == char and isTerminal:
+                stack.pop(0)
+                sequence.pop(0)
+                char = sequence[0]
+            elif not isTerminal:
+                productions = self.get_productions_for_terminal(stack[0], char)
+                if len(productions) > 1:
+                    raise Exception('gramatica este amigua')
+                if len(productions) == 0:
+                    break
+                production = productions[0]
+                no = self.find_production_number(production[0], production[1])
+                quitBand.append(no)
+                stack.pop(0)
+                temp = []
+                temp = production[1] + stack
+                stack = temp
+            else:
+                break
+            if sequence[0] == '$' and stack[0] == '$':
+                accepted = True
+                break
+        return accepted
+
+    def accepts_file(self, file):
+        with open(file, 'r') as f:
+            lines = f.readlines()
+        string = ''
+        for line in lines:
+            string += line
+        return self.accepts(string)
+
+
+g = Grammar()
+print(g.accepts_file('file1.txt'))

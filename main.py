@@ -18,6 +18,7 @@ class UI:
         print('2 => Multimea terminalelor')
         print('3 => Multimea regulilor de productie')
         print('4 => Multimea regulilor de productie pentru un anumit terminal')
+        print('5 => Verifica o secventa de intrare')
 
     '''
         Printare lista pe ecran
@@ -54,6 +55,10 @@ class UI:
                     var = grammar.get_productions_for_terminal(non)
                     for x in var:
                         print(x)
+                if s =='5':
+                    non = input('numele fisierului >')
+                    var = grammar.accepts_file(non)
+                    print(var)
                 print()
             except Exception as e:
                 print(e)
