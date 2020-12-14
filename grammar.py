@@ -1,7 +1,7 @@
 class Grammar:
 
     def __init__(self):
-        self.filename = 'grammar1.txt'
+        self.filename = 'grammar2.txt'
         self.grammar = {}
         self.stringGrammar = []
         self.read_grammar()
@@ -49,9 +49,18 @@ class Grammar:
                     prods.append((key,alist))
         return prods
 
-    def get_productions_for_terminal(self, neterminal, terminal):
-        prods = self.grammar()
-        return prods
+    def get_productions_for_composed_terminal(self, neterminal, terminal):
+        p = []
+        prods = self.grammar[neterminal]
+        for prod in prods:
+            if(prod[0] == terminal or not self.is_terminal(prod[0])):
+                p.append((neterminal,prod))
+
+            # if(prod[0] == terminal):
+            #     return (neterminal,prod)
+            # elif (not self.is_terminal(prod[0])):
+            #     self.get_productions_for_composed_terminal(prod[0],terminal)
+        return p
 
     def find_production_number(self, neterminal, terminal):
         string = neterminal + ' ->'
@@ -65,6 +74,17 @@ class Grammar:
                 return contor
         return -1
     
+    def check_match(self,stack,sequence):
+        tmp = ""
+        contor = 0
+        for word in stack:
+            tmp += word
+            contor += 1
+            if sequence == tmp:
+                return contor
+        return -1
+
+
     def get_first_production(self):
         return self.stringGrammar[0].split(' ->')[0]
 
@@ -79,14 +99,16 @@ class Grammar:
         while True:
             print(sequence, stack, quitBand)
             isTerminal = self.is_terminal(stack[0])
-            if stack[0] == char and isTerminal:
-                stack.pop(0)
+            nr = self.check_match(stack,char)
+            if nr > 0 and isTerminal:
+                for _ in range(0,nr):
+                    stack.pop(0)
                 sequence.pop(0)
                 char = sequence[0]
             elif not isTerminal:
-                productions = self.get_productions_for_terminal(stack[0], char)
-                if len(productions) > 1:
-                    raise Exception('gramatica este amigua')
+                productions = self.get_productions_for_composed_terminal(stack[0], char)
+                # if len(productions) > 1:
+                #     raise Exception('gramatica este amigua')
                 if len(productions) == 0:
                     break
                 production = productions[0]
@@ -113,4 +135,4 @@ class Grammar:
 
 
 g = Grammar()
-print(g.accepts_file('file1.txt'))
+print(g.accepts('a a a c b b'))

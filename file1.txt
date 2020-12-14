@@ -1,9 +1,9 @@
 int main(){
-double PI, r, aria, circumferinta;
-PI=3.14;
-cin >> r;
-aria = PI * r * r;
-circumferinta = 2 * PI * r;
-cout << aria;
-cout << circumferinta;
+double ID, ID, ID, ID;
+ID=CONST;
+cin >> ID;
+ID = ID * ID * ID;
+ID = CONST * ID * ID;
+cout << ID;
+cout << ID;
 }

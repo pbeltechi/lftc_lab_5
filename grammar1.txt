@@ -1,13 +1,12 @@
-program -> tip1 main ( ) { listaInstructiuni }
+program -> tip main ( ) { listaInstructiuni }
 
-tip1 -> tip2
-tip2 -> int
-
+tip -> int
 tip -> float
 tip -> double
 
-listaInstructiuni -> instructiune
-listaInstructiuni -> instructiune listaInstructiuni
+listaInstructiuni -> instructiune listaInstructiuni1
+listaInstructiuni1 -> instructiune listaInstructiuni1  
+listaInstructiuni1 -> 
 
 instructiune -> declarareVariabile
 instructiune -> citire
@@ -16,10 +15,12 @@ instructiune -> atribuire
 instructiune -> ifCondition
 instructiune -> forLoop
 
-declarareVariabile -> tip listaId ;
+declarareVariabile -> tip listaId
 
-listaId -> ID
-listaId -> ID , listaId
+listaId -> ID, listaId1
+listaId -> ID;
+listaId1 -> listaId
+listaId1 -> ID;
 
 atribuire -> ID = expresie ;
 atribuireFor -> ID = expresie
@@ -36,9 +37,9 @@ operator -> *
 operator -> /
 operator -> %
 
-citire -> CIN IN operand ;
+citire -> CIN >> operand ;
 
-scriere -> COUT OUT operand ;
+scriere -> COUT >> operand ;
 
 ifCondition -> if ( comparare ) { listaInstructiuni }
 ifCondition -> if ( comparare ) { listaInstructiuni } else { listaInstructiuni }
